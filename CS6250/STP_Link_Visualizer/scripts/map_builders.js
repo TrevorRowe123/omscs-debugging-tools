@@ -51,7 +51,7 @@ function build_map_from_output(output_id, container_id){
     )
     for(const node in parsedData.nodes){
         parsedData.nodes[node].physics = false;
-        parsedData.nodes[node].label = parsedData.nodes[node].id
+        parsedData.nodes[node].label = String(parsedData.nodes[node].id)
     }
     let data = {
         nodes: parsedData.nodes,
