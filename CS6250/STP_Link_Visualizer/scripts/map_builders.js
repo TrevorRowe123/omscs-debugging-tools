@@ -1,6 +1,11 @@
 const options = {
     layout: {
-        randomSeed: 11111
+        hierarchical: {
+            sortMethod: "directed",
+            blockShifting: "false",
+            edgeMinimization: "false",
+            direction: "DU"
+        }
     },
     physics: {
         enabled: false
