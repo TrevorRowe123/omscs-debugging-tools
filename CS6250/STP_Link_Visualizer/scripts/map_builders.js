@@ -2,8 +2,8 @@ const options = {
     layout: {
         hierarchical: {
             sortMethod: "directed",
-            blockShifting: "false",
-            edgeMinimization: "false",
+            blockShifting: false,
+            edgeMinimization: false,
             direction: "DU"
         }
     },
@@ -13,8 +13,9 @@ const options = {
 }
 
 function build_map_from_dict(link_dict_element, container_id){
-    let topo_obj = eval(document.getElementById(link_dict_element).value);
-    //let topo_obj = JSON.parse(link_dict);
+    let topo_dict = document.getElementById(link_dict_element).value;
+    let link_json = topo_dict.replaceAll(/\d*:/g, replacer);
+    let topo_obj = JSON.parse(link_json);
     let container = document.getElementById(container_id);
 
     let node_list = [];
@@ -24,6 +25,7 @@ function build_map_from_dict(link_dict_element, container_id){
         node_list.push(
             {
                 "id": node,
+                "label": node,
                 "physics": false
             }
         );
@@ -31,21 +33,19 @@ function build_map_from_dict(link_dict_element, container_id){
             edge_list.push(
                 {
                     "from": node,
-                    "to": remote,
-                    "smooth": {"enabled": false}
+                    "to": topo_obj[node][remote],
                 }
             )
         }
-        let edges = new vis.DataSet(edge_list);
-        let nodes = new vis.DataSet(node_list);
-        let data = {
-            nodes: nodes,
-            edges: edges
-        }
-
-        new vis.Network(container, data)
-
     }
+    let edges = new vis.DataSet(edge_list);
+    let nodes = new vis.DataSet(node_list);
+    let data = {
+        nodes: nodes,
+        edges: edges
+    }
+
+    new vis.Network(container, data, options)
 }
 
 function build_map_from_output(output_id, container_id){
@@ -72,4 +72,8 @@ function output_to_DOT(output){
     output = "dinetwork {" + output + "}";
     console.log(output);
     return output;
+}
+
+function replacer(match){
+    return '"' + match.replace(':', '":');
 }
