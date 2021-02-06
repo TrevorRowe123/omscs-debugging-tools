@@ -14,7 +14,8 @@ const options = {
 
 function build_map_from_dict(link_dict_element, container_id){
     let topo_dict = document.getElementById(link_dict_element).value;
-    let link_json = topo_dict.replaceAll(/\d*:/g, replacer);
+    let link_json = topo_dict.replaceAll(/\d*\s*:/g, replacer);
+    console.log(link_json)
     let topo_obj = JSON.parse(link_json);
     let container = document.getElementById(container_id);
 
@@ -75,5 +76,5 @@ function output_to_DOT(output){
 }
 
 function replacer(match){
-    return '"' + match.replace(':', '":');
+    return '"' + match.replace(':', '":').split(' ').join('');
 }
