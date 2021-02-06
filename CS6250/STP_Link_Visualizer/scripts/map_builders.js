@@ -15,7 +15,6 @@ const options = {
 function build_map_from_dict(link_dict_element, container_id){
     let topo_dict = document.getElementById(link_dict_element).value;
     let link_json = topo_dict.replaceAll(/\d*\s*:/g, replacer);
-    console.log(link_json)
     let topo_obj = JSON.parse(link_json);
     let container = document.getElementById(container_id);
 
@@ -63,7 +62,6 @@ function build_map_from_output(output_id, container_id){
         nodes: parsedData.nodes,
         edges: parsedData.edges
     }
-    console.log(data);
     new vis.Network(container, data, options);
 }
 
@@ -71,7 +69,6 @@ function output_to_DOT(output){
     output = output.toString().replaceAll("-", "--");
     output = output.toString().replaceAll(",", ";");
     output = "dinetwork {" + output + "}";
-    console.log(output);
     return output;
 }
 
