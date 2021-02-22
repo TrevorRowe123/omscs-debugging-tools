@@ -1,22 +1,49 @@
-const options = {
+let options = {
     layout: {
-        hierarchical: {
-            sortMethod: "directed",
-            blockShifting: false,
-            edgeMinimization: false,
-            direction: "DU"
+        randomSeed: 1,
+        improvedLayout: true
+    },
+    edges: {
+        arrows: {
+            to:{
+                enabled: true
+            }
         }
     },
     physics: {
-        enabled: false
+        enabled: true,
+        barnesHut: {
+            avoidOverlap: 1
+        }
     }
 }
 
+let network;
+
 function build_map_from_dict(link_dict_element, container_id){
-    let topo_dict = document.getElementById(link_dict_element).value;
-    let link_json = topo_dict.replaceAll(/\d*\s*:/g, replacer);
-    let topo_obj = JSON.parse(link_json);
+    let topo_txt = document.getElementById(link_dict_element).value;
+    let lines = topo_txt.split('\n')
+    let topo_obj = {}
     let container = document.getElementById(container_id);
+
+    if(lines.length > 150){
+        alert("Render performance above 150 nodes may be terrible, and the resulting layouts are strange. Ye be warned.")
+        options.layout.improvedLayout = false;
+        options.physics.barnesHut.avoidOverlap = 0;
+    } else {
+        options.layout.improvedLayout = true;
+        options.physics.barnesHut.avoidOverlap = 1;
+    }
+
+    for(const line in lines) {
+        let links = lines[line].split(",")
+        let node = links.shift();
+        topo_obj[node] = []
+        while(links.length > 0) {
+            topo_obj[node].push(links.shift())
+            topo_obj[node].push(links.shift())
+        }
+    }
 
     let node_list = [];
     let edge_list = [];
@@ -26,14 +53,15 @@ function build_map_from_dict(link_dict_element, container_id){
             {
                 "id": node,
                 "label": node,
-                "physics": false
+                "physics": lines.length > 150
             }
         );
         for(const remote in topo_obj[node]) {
             edge_list.push(
                 {
                     "from": node,
-                    "to": topo_obj[node][remote],
+                    "to": topo_obj[node].shift(),
+                    "label": topo_obj[node].shift()
                 }
             )
         }
@@ -45,33 +73,5 @@ function build_map_from_dict(link_dict_element, container_id){
         edges: edges
     }
 
-    new vis.Network(container, data, options)
-}
-
-function build_map_from_output(output_id, container_id){
-    let output = document.getElementById(output_id).value;
-    let container = document.getElementById(container_id);
-    let parsedData = vis.network.dotparser.parseDOT(
-        output_to_DOT(output)
-    )
-    for(const node in parsedData.nodes){
-        parsedData.nodes[node].physics = false;
-        parsedData.nodes[node].label = String(parsedData.nodes[node].id)
-    }
-    let data = {
-        nodes: parsedData.nodes,
-        edges: parsedData.edges
-    }
-    new vis.Network(container, data, options);
-}
-
-function output_to_DOT(output){
-    output = output.toString().replaceAll("-", "--");
-    output = output.toString().replaceAll(",", ";");
-    output = "dinetwork {" + output + "}";
-    return output;
-}
-
-function replacer(match){
-    return '"' + match.replace(':', '":').split(' ').join('');
+    network = new vis.Network(container, data, options);
 }
