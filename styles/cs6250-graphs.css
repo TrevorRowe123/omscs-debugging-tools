@@ -1,0 +1,10 @@
+.child {
+    padding: 5px;
+    float: left;
+    width: 30%;
+}
+
+.graph{
+    height: 500px;
+    border: 1px solid gray;
+}

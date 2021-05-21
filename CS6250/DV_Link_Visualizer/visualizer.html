@@ -1,32 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>CS6250 DV Link Visualizer</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>CS6250 DV Link Visualizer</title>
 
-    <script type="text/javascript" src="../../components/components.js"></script>
-    <script type="text/javascript" src="scripts/map_builders.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="/components/components.js"></script>
+        <script type="text/javascript" src="scripts/map_builders.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet" type="text/css" />
+        <link href="/styles/cs6250-graphs.css" rel="stylesheet" type="text/css">
+        <link href="/styles/global.css" rel="stylesheet" type="text/css">
 
-    <style type="text/css">
-        .child {
-            float: left;
-            width: 30%;
-        }
-
-        .graph{
-            height: 500px;
-            border: 1px solid gray;
-        }
-    </style>
-</head>
-<body>
-<header-component></header-component>
+    </head>
+    <body>
+        <nav-bar-component></nav-bar-component>
         <div class="child">
             <p>Topology Text: </p>
             <textarea id="topo_dict" onchange="build_map_from_dict('topo_dict', 'topo_graph')"></textarea>
             <div id="topo_graph" class="graph"></div>
         </div>
-</body>
+    </body>
 </html>

@@ -1,4 +1,5 @@
 let components = [
+    'nav-bar',
 ]
 
 for(const i in components){
@@ -6,7 +7,7 @@ for(const i in components){
 }
 
 function loadComponent(component) {
-    let url = `/omscs-debugging-tools/components/${component}.js`
+    let url = `/components/${component}.js`
     let script = document.createElement("script");  // create a script DOM node
     script.src = url;  // set its src to the provided URL
 
